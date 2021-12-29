@@ -21,3 +21,21 @@ export const addMessage = async (req, res) => {
     res.status(200).json({ messages: err.stack });
   }
 };
+
+
+const stripe = require("stripe")('sk_test_51KBXjTSJiJf23hBTl6qrq2MoMhsOGRkce9iblKCMmv3v1uzE09Jmc7uZWTGUPcbJlfonHGLEfaXK0NmPNCIHwucA00gQNCkCNx');
+
+export const payment = async (req, res) => {
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 1400,
+    currency: "eur",
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.send({
+    clientSecret: paymentIntent.client_secret,
+  });
+};
